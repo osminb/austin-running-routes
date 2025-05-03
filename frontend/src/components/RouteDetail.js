@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { shareRoute } from '../utils/api';
 
 const RouteDetail = ({ route }) => {
+  const [shareStatus, setShareStatus] = useState({ isSharing: false, result: null, error: null });
+  
   if (!route) return null;
   
   // Calculate distance from route points if available
@@ -10,6 +13,23 @@ const RouteDetail = ({ route }) => {
     
     // For demo purposes, just return the distance if it exists
     return 'Calculating...';
+  };
+  
+  const handleShareRoute = async () => {
+    try {
+      setShareStatus({ isSharing: true, result: null, error: null });
+      const result = await shareRoute(route.id);
+      setShareStatus({ isSharing: false, result, error: null });
+    } catch (error) {
+      setShareStatus({ isSharing: false, result: null, error: error.message || 'Failed to share route' });
+    }
+  };
+  
+  const copyShareLink = () => {
+    if (shareStatus.result?.share_url) {
+      navigator.clipboard.writeText(shareStatus.result.share_url);
+      alert('Share link copied to clipboard!');
+    }
   };
   
   return (
@@ -22,6 +42,37 @@ const RouteDetail = ({ route }) => {
       </div>
       
       <p className="route-description">{route.description}</p>
+      
+      <div className="route-share">
+        {!shareStatus.result ? (
+          <button 
+            className="share-button" 
+            onClick={handleShareRoute}
+            disabled={shareStatus.isSharing}
+          >
+            {shareStatus.isSharing ? 'Sharing...' : 'Share This Route'}
+          </button>
+        ) : (
+          <div className="share-result">
+            <p className="share-success">Route shared successfully!</p>
+            <div className="share-url-container">
+              <input 
+                type="text" 
+                className="share-url" 
+                value={shareStatus.result.share_url} 
+                readOnly 
+              />
+              <button className="copy-button" onClick={copyShareLink}>
+                Copy
+              </button>
+            </div>
+          </div>
+        )}
+        
+        {shareStatus.error && (
+          <p className="share-error">Error: {shareStatus.error}</p>
+        )}
+      </div>
       
       <div className="route-stats">
         <div className="detail-item">

@@ -104,15 +104,6 @@ def register_routes(app):
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 
-# TODO: Add Route Sharing Functionality
-# This will implement a new endpoint that generates a unique sharing link for a route
-# The endpoint will:
-#   1. Accept a route_id
-#   2. Generate a unique sharing code
-#   3. Return a shareable URL
-# 
-# Example implementation:
-# @routes_blueprint.route('/routes/<route_id>/share', methods=['POST'])
-# def share_route(route_id):
-#     # Generate unique sharing code
-#     # Return shareable URL
+# TODO: Add Route Sharing Functionality Below
+
+

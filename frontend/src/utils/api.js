@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5002/api';
+// Base URL for API calls - using consistent port 5005 for demo
+const API_BASE_URL = 'http://localhost:5005';
 
 /**
  * Fetch all running routes or filter by query parameters
@@ -25,7 +26,7 @@ export const fetchRoutes = async (filters = {}) => {
     }
     
     const queryString = queryParams.toString();
-    const url = `${API_BASE_URL}/routes${queryString ? `?${queryString}` : ''}`;
+    const url = `${API_BASE_URL}/api/routes${queryString ? `?${queryString}` : ''}`;
     
     const response = await axios.get(url);
     return response.data;
@@ -42,7 +43,7 @@ export const fetchRoutes = async (filters = {}) => {
  */
 export const fetchRouteById = async (routeId) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/routes/${routeId}`);
+    const response = await axios.get(`${API_BASE_URL}/api/routes/${routeId}`);
     return response.data;
   } catch (error) {
     console.error(`Error fetching route ${routeId}:`, error);
@@ -57,7 +58,7 @@ export const fetchRouteById = async (routeId) => {
  */
 export const fetchRouteWeather = async (routeId) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/routes/${routeId}/weather`);
+    const response = await axios.get(`${API_BASE_URL}/api/routes/${routeId}/weather`);
     return response.data;
   } catch (error) {
     console.error(`Error fetching weather for route ${routeId}:`, error);
@@ -88,7 +89,7 @@ export const fetchRecommendations = async (preferences = {}) => {
     }
     
     const queryString = queryParams.toString();
-    const url = `${API_BASE_URL}/recommendations${queryString ? `?${queryString}` : ''}`;
+    const url = `${API_BASE_URL}/api/recommendations${queryString ? `?${queryString}` : ''}`;
     
     const response = await axios.get(url);
     return response.data;
@@ -98,24 +99,10 @@ export const fetchRecommendations = async (preferences = {}) => {
   }
 };
 
-
-  // TODO: Add Route Sharing Functionality
-  // This function will call the backend API to generate a shareable link for a route
-  // 
-  // Example implementation:
-  // export const shareRoute = async (routeId) => {
-  //   try {
-  //     const response = await axios.post(`${API_BASE_URL}/routes/${routeId}/share`);
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error(`Error sharing route ${routeId}:`, error);
-  //     throw error;
-  //   }
-  // };
-  
+// Route Sharing Functionality
 export const shareRoute = async (routeId) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/routes/${routeId}/share`);
+    const response = await axios.post(`${API_BASE_URL}/api/routes/${routeId}/share`);
     return response.data;
   } catch (error) {
     console.error(`Error sharing route ${routeId}:`, error);

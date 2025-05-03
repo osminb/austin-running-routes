@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, GeoJSON, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, GeoJSON, useMap, CircleMarker, ZoomControl } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -48,6 +48,13 @@ const Map = ({ routes, selectedRoute, onRouteSelect }) => {
   // Austin, TX center coordinates
   const defaultCenter = [30.2672, -97.7431];
   const defaultZoom = 12;
+  const [showRoutePaths, setShowRoutePaths] = useState(true);
+  
+  // Debug logs
+  useEffect(() => {
+    console.log('Map component received routes:', routes);
+    console.log('Selected route:', selectedRoute);
+  }, [routes, selectedRoute]);
   
   // Colors for different route difficulties
   const difficultyColors = {
@@ -113,6 +120,11 @@ const Map = ({ routes, selectedRoute, onRouteSelect }) => {
   
   // Create GeoJSON data
   const geojsonData = routesToGeoJSON(routes);
+
+  // Toggle route paths visibility
+  const toggleRoutePaths = () => {
+    setShowRoutePaths(!showRoutePaths);
+  };
   
   return (
     <div className="map-wrapper">
@@ -127,23 +139,62 @@ const Map = ({ routes, selectedRoute, onRouteSelect }) => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         
-        {/* Add zoom control to top-right */}
-        <div className="leaflet-top leaflet-right">
-          <div className="leaflet-control-zoom leaflet-bar leaflet-control">
-            <a className="leaflet-control-zoom-in" href="#" title="Zoom in" role="button" aria-label="Zoom in">+</a>
-            <a className="leaflet-control-zoom-out" href="#" title="Zoom out" role="button" aria-label="Zoom out">−</a>
-          </div>
-        </div>
+        {/* Add proper Leaflet zoom control to top-right */}
+        <ZoomControl position="topright" />
         
         {/* Map controller to handle view updates */}
         <MapController selectedRoute={selectedRoute} />
         
-        {/* Render routes as GeoJSON */}
-        <GeoJSON 
-          data={geojsonData} 
-          style={styleRoute} 
-          onEachFeature={onEachFeature} 
-        />
+        {/* Render routes as GeoJSON if showRoutePaths is true */}
+        {showRoutePaths && (
+          <GeoJSON 
+            data={geojsonData} 
+            style={styleRoute} 
+            onEachFeature={onEachFeature} 
+          />
+        )}
+        
+        {/* Add route dots for each route */}
+        {routes.map(route => {
+          // Get the middle point of the route to place the dot
+          const middlePointIndex = Math.floor((route.points.length - 1) / 2);
+          const middlePoint = route.points[middlePointIndex];
+          
+          // Get color based on difficulty
+          const color = difficultyColors[route.difficulty] || '#3388ff';
+          
+          return (
+            <CircleMarker 
+              key={`dot-${route.id}`}
+              center={[middlePoint.lat, middlePoint.lng]}
+              radius={selectedRoute && selectedRoute.id === route.id ? 12 : 8}
+              pathOptions={{
+                fillColor: color,
+                fillOpacity: 0.8,
+                color: 'white',
+                weight: 2,
+                opacity: 1
+              }}
+              eventHandlers={{
+                click: () => onRouteSelect(route)
+              }}
+            >
+              <Popup>
+                <div className="map-popup">
+                  <h3>{route.name}</h3>
+                  <p className="route-difficulty">Difficulty: <span style={{ color }}>{route.difficulty}</span></p>
+                  <p>{route.description}</p>
+                  <button 
+                    className="view-details-btn"
+                    onClick={() => onRouteSelect(route)}
+                  >
+                    View Details
+                  </button>
+                </div>
+              </Popup>
+            </CircleMarker>
+          );
+        })}
         
         {/* Add start markers for each route */}
         {routes.map(route => (
@@ -158,6 +209,7 @@ const Map = ({ routes, selectedRoute, onRouteSelect }) => {
             <Popup>
               <div className="map-popup">
                 <h3>{route.name}</h3>
+                <p><strong>Starting Point</strong></p>
                 <p>{route.description}</p>
                 <button 
                   className="view-details-btn"
@@ -169,6 +221,13 @@ const Map = ({ routes, selectedRoute, onRouteSelect }) => {
             </Popup>
           </Marker>
         ))}
+        
+        {/* Toggle button for route paths */}
+        <div className="map-control-toggle">
+          <button onClick={toggleRoutePaths} className="toggle-routes-btn">
+            {showRoutePaths ? 'Hide Route Paths' : 'Show Route Paths'}
+          </button>
+        </div>
         
         {/* Legend */}
         <div className="map-legend">
@@ -184,6 +243,24 @@ const Map = ({ routes, selectedRoute, onRouteSelect }) => {
           <div className="legend-item">
             <span className="legend-color" style={{ backgroundColor: difficultyColors['Hard'] }}></span>
             <span>Hard</span>
+          </div>
+          <div className="legend-item">
+            <span className="legend-icon">
+              <img 
+                src="https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png" 
+                alt="Start marker"
+                style={{ width: '12px', height: '20px' }}
+              />
+            </span>
+            <span>Starting Point</span>
+          </div>
+          <div className="legend-item">
+            <span className="legend-icon">
+              <svg height="16" width="16">
+                <circle cx="8" cy="8" r="6" stroke="white" strokeWidth="2" fill="#3388ff" />
+              </svg>
+            </span>
+            <span>Route Midpoint</span>
           </div>
         </div>
       </MapContainer>

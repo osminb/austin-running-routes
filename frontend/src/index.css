@@ -98,16 +98,59 @@ code {
 .filter-section {
   padding: 1.5rem;
   border-bottom: 1px solid var(--border-color);
+  background-color: var(--card-bg);
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .filter-section h3 {
   margin-top: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
   color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--highlight-color);
+  display: inline-block;
+}
+
+.section-tabs {
+  display: flex;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+.section-tabs button {
+  background: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.section-tabs button:hover {
+  color: var(--highlight-color);
+  background-color: rgba(13, 110, 253, 0.05);
+}
+
+.section-tabs button.active-tab {
+  color: var(--highlight-color);
+  border-bottom: 2px solid var(--highlight-color);
+  font-weight: 600;
+}
+
+.filters {
+  padding: 0.5rem 0;
 }
 
 .filter-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
 }
 
 .filter-group label {
@@ -115,23 +158,156 @@ code {
   margin-bottom: 0.5rem;
   font-weight: 500;
   color: var(--text-secondary);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}
+
+.filter-group input[type="number"] {
+  appearance: none;
+  -moz-appearance: textfield; /* Firefox */
+  padding: 0.7rem 1rem;
+  height: 42px;
+  border: 1px solid #d1d9e6;
+  border-radius: 8px;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: all 0.25s ease;
+}
+
+.filter-group input[type="number"]::-webkit-inner-spin-button,
+.filter-group input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.filter-group input[type="number"]:focus {
+  outline: none;
+  border-color: var(--highlight-color);
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+  transform: translateY(-1px);
+}
+
+.filter-group input[type="number"]:hover {
+  border-color: #b0bec5;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.dark-mode .filter-group input[type="number"] {
+  border-color: #495057;
+  background-color: #2d3748;
+  color: #e2e8f0;
+}
+
+.dark-mode .filter-group input[type="number"]:hover {
+  border-color: #6c757d;
+  background-color: #343a40;
+}
+
+.dark-mode .filter-group input[type="number"]:focus {
+  border-color: #3d8bfd;
+  background-color: #343a40;
+}
+
+.filter-group select {
+  height: 42px;
+  border-radius: 8px;
+  border: 1px solid #d1d9e6;
+  background-color: var(--bg-secondary);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  padding-right: 2.5rem;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.dark-mode .filter-group select {
+  border-color: #495057;
+  background-color: #2d3748;
+  color: #e2e8f0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23adb5bd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
 }
 
 .filter-group input,
 .filter-group select {
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.7rem 1rem;
   border: 1px solid var(--border-color);
-  border-radius: 4px;
+  border-radius: 6px;
   background-color: var(--bg-secondary);
   color: var(--text-primary);
-  transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .filter-group input:focus,
 .filter-group select:focus {
   outline: none;
   border-color: var(--highlight-color);
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+}
+
+.filter-group input:hover,
+.filter-group select:hover {
+  border-color: #adb5bd;
+}
+
+.filter-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.filter-buttons button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.apply-button {
+  background-color: var(--highlight-color);
+  color: white;
+  flex: 1;
+  margin-right: 0.5rem;
+}
+
+.apply-button:hover {
+  background-color: #0b5ed7;
+  transform: translateY(-1px);
+}
+
+.reset-button {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  border: 1px solid #dee2e6 !important;
+  flex: 0.5;
+}
+
+.reset-button:hover {
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+.dark-mode .reset-button {
+  background-color: #343a40;
+  color: #adb5bd;
+  border-color: #495057 !important;
+}
+
+.dark-mode .reset-button:hover {
+  background-color: #495057;
+  color: #dee2e6;
 }
 
 .map-container {
@@ -140,6 +316,8 @@ code {
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   background-color: #fff;
+  height: 600px;
+  margin-left: 20px;
 }
 
 .route-list {
@@ -276,45 +454,6 @@ code {
 .good-for-running.no {
   background-color: #ffebee;
   color: #c62828;
-}
-
-.section-tabs {
-  display: flex;
-  width: 100%;
-  border-bottom: 1px solid #eee;
-}
-
-.section-tabs button {
-  flex: 1;
-  padding: 1.2rem 1rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #777;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.section-tabs button.active-tab {
-  color: #4CAF50;
-}
-
-.section-tabs button.active-tab::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background-color: #4CAF50;
-  border-radius: 3px 3px 0 0;
-}
-
-.section-tabs button:hover {
-  color: #4CAF50;
-  background-color: #f5f9f5;
 }
 
 .recommendations-container {
@@ -550,13 +689,85 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-/* Map styles */
+/* Map styles for route dots and controls */
 .map-wrapper {
   position: relative;
-  height: 100%;
+  height: 600px;
   width: 100%;
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
+  box-shadow: var(--card-shadow);
+}
+
+.map-popup {
+  text-align: center;
+  max-width: 250px;
+}
+
+.map-popup h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.map-popup p {
+  margin: 8px 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.map-popup .route-difficulty {
+  font-weight: bold;
+}
+
+.view-details-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-top: 8px;
+  transition: background-color 0.2s;
+}
+
+.view-details-btn:hover {
+  background-color: #388E3C;
+}
+
+.map-control-toggle {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+}
+
+.toggle-routes-btn {
+  background-color: white;
+  color: #333;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s;
+}
+
+.toggle-routes-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.dark-mode .toggle-routes-btn {
+  background-color: #333;
+  color: white;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode .toggle-routes-btn:hover {
+  background-color: #444;
 }
 
 .map-legend {
@@ -564,40 +775,98 @@ input:checked + .slider:before {
   bottom: 20px;
   right: 20px;
   background-color: white;
-  padding: 12px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  padding: 10px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
   z-index: 1000;
-  font-size: 0.9rem;
+  max-width: 200px;
+}
+
+.dark-mode .map-legend {
+  background-color: #333;
+  color: white;
 }
 
 .map-legend h4 {
-  margin: 0 0 8px 0;
-  font-size: 1rem;
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
   font-weight: 600;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
+}
+
+.dark-mode .map-legend h4 {
+  border-bottom-color: #555;
 }
 
 .legend-item {
   display: flex;
   align-items: center;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
+  font-size: 0.85rem;
 }
 
 .legend-color {
   display: inline-block;
   width: 16px;
-  height: 6px;
+  height: 16px;
+  border-radius: 50%;
   margin-right: 8px;
-  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
+.legend-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+/* Pulse animation for selected route dot */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.leaflet-interactive {
+  transition: all 0.3s ease;
+}
+
+.leaflet-interactive:hover {
+  stroke-width: 3;
+  stroke-opacity: 1;
+}
+
+/* Map styles */
+/* .map-wrapper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+} */
+
 .map-popup h3 {
-  margin: 0 0 8px 0;
+  margin: 0;
+  margin-bottom: 8px;
   font-size: 1rem;
 }
 
 .map-popup p {
-  margin: 0 0 8px 0;
+  margin: 0;
   font-size: 0.9rem;
 }
 
