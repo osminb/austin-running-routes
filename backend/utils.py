@@ -211,7 +211,7 @@ def recommend_routes(routes, weather_preference=None, distance_preference=None, 
                 score += 3
             elif weather_preference == 'cloudy' and ('cloud' in weather_desc):
                 score += 3
-            elif weather_preference == 'cool' and temp < 65:
+            elif weather_preference == 'cool' and isinstance(temp, (int, float)) and temp < 65:
                 score += 3
         
         # Always add route to recommendations, but with a score

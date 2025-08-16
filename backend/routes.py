@@ -6,6 +6,25 @@ from utils import calculate_route_difficulty, filter_routes_by_distance, get_wea
 # Path to our data file
 ROUTES_DATA_PATH = os.path.join(os.path.dirname(__file__), 'data', 'running_routes.json')
 
+# In-memory cache for routes data
+_routes_cache = None
+_cache_timestamp = None
+
+def load_routes_data():
+    """Load routes data with caching to avoid repeated file I/O"""
+    global _routes_cache, _cache_timestamp
+    
+    file_mtime = os.path.getmtime(ROUTES_DATA_PATH)
+    
+    if _routes_cache is not None and _cache_timestamp == file_mtime:
+        return _routes_cache
+    
+    with open(ROUTES_DATA_PATH, 'r') as f:
+        _routes_cache = json.load(f)
+        _cache_timestamp = file_mtime
+        
+    return _routes_cache
+
 def register_routes(app):
     """Register all API routes with the Flask app"""
     
@@ -14,8 +33,7 @@ def register_routes(app):
         """Get all running routes or filter by query parameters"""
         try:
             # Load routes data
-            with open(ROUTES_DATA_PATH, 'r') as f:
-                routes = json.load(f)
+            routes = load_routes_data()
             
             # Apply filters if provided
             min_distance = request.args.get('min_distance', type=float)
@@ -37,8 +55,7 @@ def register_routes(app):
         """Get a specific route by ID"""
         try:
             # Load routes data
-            with open(ROUTES_DATA_PATH, 'r') as f:
-                routes = json.load(f)
+            routes = load_routes_data()
             
             # Find the route with the matching ID
             route = next((r for r in routes if r.get('id') == route_id), None)
@@ -55,8 +72,7 @@ def register_routes(app):
         """Get current weather conditions for a specific route"""
         try:
             # Load routes data
-            with open(ROUTES_DATA_PATH, 'r') as f:
-                routes = json.load(f)
+            routes = load_routes_data()
             
             # Find the route with the matching ID
             route = next((r for r in routes if r.get('id') == route_id), None)
@@ -84,8 +100,7 @@ def register_routes(app):
         """Get route recommendations based on preferences"""
         try:
             # Load routes data
-            with open(ROUTES_DATA_PATH, 'r') as f:
-                routes = json.load(f)
+            routes = load_routes_data()
             
             # Get preference parameters
             weather_pref = request.args.get('weather')
